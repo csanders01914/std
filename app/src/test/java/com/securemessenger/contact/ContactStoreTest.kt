@@ -28,4 +28,11 @@ class ContactStoreTest {
     @Test fun `getByOnion returns null for unknown address`() {
         assertNull(store.getByOnion("unknown.onion"))
     }
+
+    @Test fun `two contacts from the same bundle are equal`() {
+        val bundle = KeyBundle(ByteArray(32), "a".repeat(56) + ".onion", ByteArray(10))
+        val c1 = Contact.fromKeyBundle(bundle)
+        val c2 = Contact.fromKeyBundle(bundle)
+        assertEquals(c1, c2)
+    }
 }

@@ -7,6 +7,8 @@ data class Contact(
     val keyBundle: KeyBundle,
     val signalAddress: SignalProtocolAddress,
 ) {
+    override fun toString() = "Contact(onion=${signalAddress.name.take(8)}…)"
+
     companion object {
         fun fromKeyBundle(bundle: KeyBundle): Contact = Contact(
             keyBundle      = bundle,

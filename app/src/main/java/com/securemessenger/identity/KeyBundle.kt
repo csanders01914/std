@@ -24,6 +24,7 @@ data class KeyBundle(
         result = 31 * result + signedPreKey.contentHashCode()
         return result
     }
+    override fun toString() = "KeyBundle(onion=${onionAddress.take(8)}…)"
 
     companion object {
         private val PUB_RE   = Regex(""""pub"\s*:\s*"([^"]+)"""")
