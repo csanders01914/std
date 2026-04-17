@@ -1,0 +1,32 @@
+[versions]
+kotlin = "2.0.21"
+agp = "8.7.3"
+compose-bom = "2024.12.01"
+activity-compose = "1.9.3"
+security-crypto = "1.1.0-alpha06"
+libsignal = "0.54.0"
+tor-android = "0.4.8.16"
+jtorctl = "0.4.5.7"
+zxing = "3.5.3"
+commons-codec = "1.17.0"
+desugar-jdk = "2.1.4"
+
+[libraries]
+compose-bom          = { group = "androidx.compose", name = "compose-bom",           version.ref = "compose-bom" }
+compose-ui           = { group = "androidx.compose.ui", name = "ui" }
+compose-material3    = { group = "androidx.compose.material3", name = "material3" }
+compose-tooling      = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+activity-compose     = { group = "androidx.activity", name = "activity-compose",     version.ref = "activity-compose" }
+security-crypto      = { group = "androidx.security", name = "security-crypto",      version.ref = "security-crypto" }
+libsignal-android    = { group = "org.signal", name = "libsignal-android",           version.ref = "libsignal" }
+tor-android          = { group = "info.guardianproject", name = "tor-android",       version.ref = "tor-android" }
+jtorctl              = { group = "info.guardianproject", name = "jtorctl",           version.ref = "jtorctl" }
+zxing-core           = { group = "com.google.zxing", name = "core",                 version.ref = "zxing" }
+commons-codec        = { group = "commons-codec", name = "commons-codec",           version.ref = "commons-codec" }
+junit                = { group = "junit", name = "junit",                            version = "4.13.2" }
+desugar-jdk-libs     = { group = "com.android.tools", name = "desugar_jdk_libs",    version.ref = "desugar-jdk" }
+
+[plugins]
+android-application  = { id = "com.android.application", version.ref = "agp" }
+kotlin-android       = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose       = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
