@@ -18,7 +18,12 @@ data class KeyBundle(
             && ed25519PublicKey.contentEquals(other.ed25519PublicKey)
             && onionAddress == other.onionAddress
             && signedPreKey.contentEquals(other.signedPreKey)
-    override fun hashCode() = onionAddress.hashCode()
+    override fun hashCode(): Int {
+        var result = ed25519PublicKey.contentHashCode()
+        result = 31 * result + onionAddress.hashCode()
+        result = 31 * result + signedPreKey.contentHashCode()
+        return result
+    }
 
     companion object {
         private val PUB_RE   = Regex(""""pub"\s*:\s*"([^"]+)"""")
