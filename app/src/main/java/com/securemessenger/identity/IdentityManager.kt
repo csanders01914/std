@@ -46,9 +46,10 @@ object IdentityManager {
         )
 
         val bundle = KeyBundle(
-            ed25519PublicKey = pub32,
-            onionAddress     = deriveOnionAddress(pub32),
-            signedPreKey     = spkRecord.serialize(),
+            ed25519PublicKey      = pub32,
+            onionAddress          = deriveOnionAddress(pub32),
+            signedPreKey          = spkRecord.serialize(),
+            signalIdentityKeyPair = signalIdPair.serialize(),
         )
         return Pair(bundle, priv32)
     }
