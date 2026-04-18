@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.jtorctl)
     implementation(libs.zxing.core)
     implementation(libs.commons.codec)
+    implementation(libs.navigation.compose)
     testImplementation(libs.junit)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
