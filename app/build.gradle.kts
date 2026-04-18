@@ -42,6 +42,10 @@ dependencies {
     implementation(libs.zxing.core)
     implementation(libs.commons.codec)
     implementation(libs.navigation.compose)
+    implementation(libs.camera.camera2)
+    implementation(libs.camera.lifecycle)
+    implementation(libs.camera.view)
+    implementation(libs.lifecycle.runtime.compose)
     testImplementation(libs.junit)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
