@@ -1,0 +1,91 @@
+<h2>Component Breakdown</h2>
+<p class="subtitle">Modules, responsibilities, and boundaries</p>
+
+<div style="display:flex;flex-direction:column;gap:20px;margin-top:16px;">
+
+  <!-- Identity Manager -->
+  <div style="background:#ffffff08;border:1.5px solid #4a9eff55;border-radius:10px;padding:18px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+      <div style="background:#4a9eff;border-radius:6px;padding:4px 10px;font-size:0.8em;font-weight:bold;color:#000;">IdentityManager</div>
+      <div style="font-size:0.8em;opacity:0.5;">generated once on first launch</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.85em;">
+      <div><span style="opacity:0.5;">Generates</span> Ed25519 key pair</div>
+      <div><span style="opacity:0.5;">Derives</span> Tor v3 .onion address from public key</div>
+      <div><span style="opacity:0.5;">Holds</span> private key in memory only</div>
+      <div><span style="opacity:0.5;">Exports</span> public key as QR code for sharing</div>
+    </div>
+  </div>
+
+  <!-- Contact Store -->
+  <div style="background:#ffffff08;border:1.5px solid #a78bfa55;border-radius:10px;padding:18px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+      <div style="background:#a78bfa;border-radius:6px;padding:4px 10px;font-size:0.8em;font-weight:bold;color:#000;">ContactStore</div>
+      <div style="font-size:0.8em;opacity:0.5;">in-memory only, lost on app close</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.85em;">
+      <div><span style="opacity:0.5;">Stores</span> contact public keys + .onion addresses</div>
+      <div><span style="opacity:0.5;">Added via</span> QR scan only</div>
+      <div><span style="opacity:0.5;">No</span> names, metadata, or timestamps</div>
+      <div><span style="opacity:0.5;">Cleared</span> entirely on process death</div>
+    </div>
+  </div>
+
+  <!-- Signal Session Manager -->
+  <div style="background:#ffffff08;border:1.5px solid #34d39955;border-radius:10px;padding:18px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+      <div style="background:#34d399;border-radius:6px;padding:4px 10px;font-size:0.8em;font-weight:bold;color:#000;">SignalSessionManager</div>
+      <div style="font-size:0.8em;opacity:0.5;">wraps libsignal-android</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.85em;">
+      <div><span style="opacity:0.5;">Runs</span> X3DH key agreement on first contact</div>
+      <div><span style="opacity:0.5;">Maintains</span> Double Ratchet state per contact</div>
+      <div><span style="opacity:0.5;">Encrypts</span> outbound messages</div>
+      <div><span style="opacity:0.5;">Decrypts</span> inbound messages</div>
+      <div><span style="opacity:0.5;">All state</span> in memory only</div>
+      <div><span style="opacity:0.5;">Provides</span> forward secrecy + break-in recovery</div>
+    </div>
+  </div>
+
+  <!-- Tor Transport -->
+  <div style="background:#ffffff08;border:1.5px solid #f59e0b55;border-radius:10px;padding:18px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+      <div style="background:#f59e0b;border-radius:6px;padding:4px 10px;font-size:0.8em;font-weight:bold;color:#000;">TorTransport</div>
+      <div style="font-size:0.8em;opacity:0.5;">wraps tor-android (Guardian Project)</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.85em;">
+      <div><span style="opacity:0.5;">Starts</span> embedded Tor daemon on launch</div>
+      <div><span style="opacity:0.5;">Hosts</span> a v3 hidden service to receive messages</div>
+      <div><span style="opacity:0.5;">Routes</span> outbound connections over Tor circuit</div>
+      <div><span style="opacity:0.5;">Exposes</span> simple send(onion, bytes) / receive callback</div>
+    </div>
+  </div>
+
+  <!-- Message Queue -->
+  <div style="background:#ffffff08;border:1.5px solid #f8717155;border-radius:10px;padding:18px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+      <div style="background:#f87171;border-radius:6px;padding:4px 10px;font-size:0.8em;font-weight:bold;color:#000;">MessageQueue</div>
+      <div style="font-size:0.8em;opacity:0.5;">ephemeral delivery buffer</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.85em;">
+      <div><span style="opacity:0.5;">Buffers</span> outbound messages when recipient is offline</div>
+      <div><span style="opacity:0.5;">Retries</span> delivery until ACK received or app closes</div>
+      <div><span style="opacity:0.5;">Drops</span> all undelivered messages on app close</div>
+      <div><span style="opacity:0.5;">No</span> persistence, no server-side queuing</div>
+    </div>
+  </div>
+
+  <!-- UI Layer -->
+  <div style="background:#ffffff08;border:1.5px solid #ffffff20;border-radius:10px;padding:18px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+      <div style="background:#888;border-radius:6px;padding:4px 10px;font-size:0.8em;font-weight:bold;color:#000;">UI (Jetpack Compose)</div>
+      <div style="font-size:0.8em;opacity:0.5;">thin shell, no business logic</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:0.85em;">
+      <div>Contact list screen</div>
+      <div>Chat screen</div>
+      <div>QR scanner / generator</div>
+    </div>
+  </div>
+
+</div>

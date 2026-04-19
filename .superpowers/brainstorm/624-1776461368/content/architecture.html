@@ -1,0 +1,99 @@
+<h2>System Architecture</h2>
+<p class="subtitle">Secure Messenger — Tor + Signal Protocol, Native Kotlin</p>
+
+<div style="display:flex;flex-direction:column;gap:24px;margin-top:16px;">
+
+  <!-- Layer stack -->
+  <div class="mockup">
+    <div class="mockup-header">Application Layer Stack</div>
+    <div class="mockup-body" style="padding:24px;">
+      <div style="display:flex;flex-direction:column;gap:8px;max-width:480px;margin:0 auto;">
+
+        <div style="background:#4a9eff22;border:1.5px solid #4a9eff;border-radius:8px;padding:14px 20px;text-align:center;">
+          <strong style="color:#4a9eff;">UI Layer</strong>
+          <div style="font-size:0.85em;margin-top:4px;opacity:0.8;">Compose UI — contacts list, chat view, QR scanner</div>
+        </div>
+
+        <div style="text-align:center;font-size:1.2em;opacity:0.4;">↓</div>
+
+        <div style="background:#a78bfa22;border:1.5px solid #a78bfa;border-radius:8px;padding:14px 20px;text-align:center;">
+          <strong style="color:#a78bfa;">Messaging Layer</strong>
+          <div style="font-size:0.85em;margin-top:4px;opacity:0.8;">Session management · message queuing · contact store (in-memory)</div>
+        </div>
+
+        <div style="text-align:center;font-size:1.2em;opacity:0.4;">↓</div>
+
+        <div style="background:#34d39922;border:1.5px solid #34d399;border-radius:8px;padding:14px 20px;text-align:center;">
+          <strong style="color:#34d399;">Crypto Layer — libsignal-android</strong>
+          <div style="font-size:0.85em;margin-top:4px;opacity:0.8;">X3DH key agreement · Double Ratchet E2EE · Ed25519 identity keys</div>
+        </div>
+
+        <div style="text-align:center;font-size:1.2em;opacity:0.4;">↓</div>
+
+        <div style="background:#f59e0b22;border:1.5px solid #f59e0b;border-radius:8px;padding:14px 20px;text-align:center;">
+          <strong style="color:#f59e0b;">Transport Layer — tor-android</strong>
+          <div style="font-size:0.85em;margin-top:4px;opacity:0.8;">Tor v3 hidden service · .onion address = identity · onion-routed TCP</div>
+        </div>
+
+        <div style="text-align:center;font-size:1.2em;opacity:0.4;">↓</div>
+
+        <div style="background:#f8717122;border:1.5px solid #f87171;border-radius:8px;padding:14px 20px;text-align:center;">
+          <strong style="color:#f87171;">Network</strong>
+          <div style="font-size:0.85em;margin-top:4px;opacity:0.8;">Tor network (3-hop circuit) — no IP exposure, no central server</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Message flow -->
+  <div class="mockup">
+    <div class="mockup-header">Message Flow: Alice → Bob</div>
+    <div class="mockup-body" style="padding:20px;">
+      <div style="display:flex;align-items:center;justify-content:space-around;flex-wrap:wrap;gap:12px;">
+
+        <div style="text-align:center;min-width:100px;">
+          <div style="font-size:2em;">📱</div>
+          <div style="font-weight:bold;margin:4px 0;">Alice</div>
+          <div style="font-size:0.75em;opacity:0.6;">Ed25519 keypair<br/>.onion address</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:180px;">
+          <div style="font-size:0.7em;opacity:0.6;text-align:center;">Double Ratchet encrypt</div>
+          <div style="width:100%;height:2px;background:linear-gradient(90deg,#4a9eff,#a78bfa);border-radius:2px;"></div>
+          <div style="font-size:0.7em;opacity:0.6;text-align:center;">3-hop Tor circuit</div>
+          <div style="width:100%;height:2px;background:linear-gradient(90deg,#f59e0b,#f87171);border-radius:2px;"></div>
+          <div style="font-size:0.75em;opacity:0.5;text-align:center;margin-top:4px;">Tor nodes cannot read payload<br/>No node knows both sender + recipient</div>
+        </div>
+
+        <div style="text-align:center;min-width:100px;">
+          <div style="font-size:2em;">📱</div>
+          <div style="font-weight:bold;margin:4px 0;">Bob</div>
+          <div style="font-size:0.75em;opacity:0.6;">Ed25519 keypair<br/>.onion address</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Key facts -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
+    <div style="background:#ffffff08;border:1px solid #ffffff15;border-radius:8px;padding:14px;">
+      <div class="label">Identity</div>
+      <div style="margin-top:6px;font-size:0.9em;">Ed25519 public key <em>is</em> the user. No accounts, no usernames, no phone numbers.</div>
+    </div>
+    <div style="background:#ffffff08;border:1px solid #ffffff15;border-radius:8px;padding:14px;">
+      <div class="label">Key Exchange</div>
+      <div style="margin-top:6px;font-size:0.9em;">In-person QR scan only. X3DH runs on first message. Verified TOFU.</div>
+    </div>
+    <div style="background:#ffffff08;border:1px solid #ffffff15;border-radius:8px;padding:14px;">
+      <div class="label">Persistence</div>
+      <div style="margin-top:6px;font-size:0.9em;">Messages in RAM only. Nothing written to disk. Cleared on app close.</div>
+    </div>
+    <div style="background:#ffffff08;border:1px solid #ffffff15;border-radius:8px;padding:14px;">
+      <div class="label">Distribution</div>
+      <div style="margin-top:6px;font-size:0.9em;">Signed APK, sideloaded. No Play Store. Targets GrapheneOS/AOSP.</div>
+    </div>
+  </div>
+
+</div>

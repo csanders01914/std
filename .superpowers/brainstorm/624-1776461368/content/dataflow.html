@@ -1,0 +1,119 @@
+<h2>Data Flows</h2>
+<p class="subtitle">Key exchange and message delivery step by step</p>
+
+<div style="display:flex;flex-direction:column;gap:28px;margin-top:16px;">
+
+  <!-- Flow 1: Key Exchange -->
+  <div class="mockup">
+    <div class="mockup-header">Flow 1 — Adding a Contact (In-Person QR Exchange)</div>
+    <div class="mockup-body" style="padding:20px;">
+      <div style="display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap;">
+
+        <!-- Alice side -->
+        <div style="flex:1;min-width:180px;">
+          <div style="text-align:center;margin-bottom:12px;font-weight:bold;color:#4a9eff;">Alice's Device</div>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82em;">
+            <div style="background:#4a9eff18;border:1px solid #4a9eff44;border-radius:6px;padding:10px;">1. Tap "Show My QR"</div>
+            <div style="background:#4a9eff18;border:1px solid #4a9eff44;border-radius:6px;padding:10px;">2. QR encodes: <code>Ed25519 pubkey + .onion address</code></div>
+            <div style="background:#4a9eff18;border:1px solid #4a9eff44;border-radius:6px;padding:10px;">4. Scans Bob's QR in return</div>
+            <div style="background:#4a9eff18;border:1px solid #4a9eff44;border-radius:6px;padding:10px;">5. Bob added to ContactStore (memory)</div>
+            <div style="background:#34d39918;border:1px solid #34d39944;border-radius:6px;padding:10px;">6. X3DH pre-keys generated, ready for first message</div>
+          </div>
+        </div>
+
+        <!-- Middle -->
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:0 8px;">
+          <div style="font-size:2em;">📱</div>
+          <div style="font-size:0.7em;opacity:0.5;text-align:center;">physically<br/>present</div>
+          <div style="font-size:2em;">📷</div>
+          <div style="width:2px;height:40px;background:linear-gradient(#4a9eff,#a78bfa);"></div>
+          <div style="font-size:2em;">📷</div>
+          <div style="font-size:0.7em;opacity:0.5;text-align:center;">scan each<br/>other</div>
+          <div style="font-size:2em;">📱</div>
+        </div>
+
+        <!-- Bob side -->
+        <div style="flex:1;min-width:180px;">
+          <div style="text-align:center;margin-bottom:12px;font-weight:bold;color:#a78bfa;">Bob's Device</div>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82em;">
+            <div style="background:#a78bfa18;border:1px solid #a78bfa44;border-radius:6px;padding:10px;">1. Tap "Show My QR"</div>
+            <div style="background:#a78bfa18;border:1px solid #a78bfa44;border-radius:6px;padding:10px;">2. QR encodes: <code>Ed25519 pubkey + .onion address</code></div>
+            <div style="background:#a78bfa18;border:1px solid #a78bfa44;border-radius:6px;padding:10px;">3. Scans Alice's QR</div>
+            <div style="background:#a78bfa18;border:1px solid #a78bfa44;border-radius:6px;padding:10px;">4. Alice added to ContactStore (memory)</div>
+            <div style="background:#34d39918;border:1px solid #34d39944;border-radius:6px;padding:10px;">5. X3DH pre-keys generated, ready for first message</div>
+          </div>
+        </div>
+
+      </div>
+      <div style="margin-top:16px;padding:10px;background:#ffffff08;border-radius:6px;font-size:0.78em;opacity:0.7;text-align:center;">
+        No network involved. No data leaves either device during this step. MITM is physically impossible.
+      </div>
+    </div>
+  </div>
+
+  <!-- Flow 2: Sending a Message -->
+  <div class="mockup">
+    <div class="mockup-header">Flow 2 — Sending a Message</div>
+    <div class="mockup-body" style="padding:20px;">
+      <div style="display:flex;flex-direction:column;gap:0;">
+
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid #ffffff10;">
+          <div style="background:#34d399;color:#000;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75em;font-weight:bold;flex-shrink:0;">1</div>
+          <div style="font-size:0.85em;"><strong>Alice types message</strong> — plaintext exists only in UI layer memory</div>
+        </div>
+
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid #ffffff10;">
+          <div style="background:#34d399;color:#000;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75em;font-weight:bold;flex-shrink:0;">2</div>
+          <div style="font-size:0.85em;"><strong>SignalSessionManager encrypts</strong> via Double Ratchet → produces opaque ciphertext blob. Ratchet advances; this key is now gone forever.</div>
+        </div>
+
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid #ffffff10;">
+          <div style="background:#f59e0b;color:#000;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75em;font-weight:bold;flex-shrink:0;">3</div>
+          <div style="font-size:0.85em;"><strong>TorTransport opens circuit</strong> to Bob's .onion address — 3 hops through Tor network. Alice's IP not visible to Bob or any relay.</div>
+        </div>
+
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid #ffffff10;">
+          <div style="background:#f59e0b;color:#000;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75em;font-weight:bold;flex-shrink:0;">4</div>
+          <div style="font-size:0.85em;"><strong>Ciphertext delivered</strong> to Bob's hidden service. If Bob is offline → MessageQueue retries. No server stores the message.</div>
+        </div>
+
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid #ffffff10;">
+          <div style="background:#4a9eff;color:#000;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75em;font-weight:bold;flex-shrink:0;">5</div>
+          <div style="font-size:0.85em;"><strong>Bob's TorTransport receives blob</strong> → passes to SignalSessionManager → Double Ratchet decrypts → plaintext passed to UI.</div>
+        </div>
+
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 0;">
+          <div style="background:#4a9eff;color:#000;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75em;font-weight:bold;flex-shrink:0;">6</div>
+          <div style="font-size:0.85em;"><strong>ACK sent back</strong> over same circuit. Alice's MessageQueue drops the buffered message. Plaintext never written to disk on either device.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- What an attacker sees -->
+  <div class="mockup">
+    <div class="mockup-header">What an Attacker Sees at Each Layer</div>
+    <div class="mockup-body" style="padding:16px;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;font-size:0.82em;">
+        <div style="background:#f8717118;border:1px solid #f8717144;border-radius:6px;padding:12px;">
+          <div style="font-weight:bold;color:#f87171;margin-bottom:6px;">Network observer</div>
+          Sees encrypted Tor traffic. Cannot identify sender, recipient, or content.
+        </div>
+        <div style="background:#f8717118;border:1px solid #f8717144;border-radius:6px;padding:12px;">
+          <div style="font-weight:bold;color:#f87171;margin-bottom:6px;">Tor relay node</div>
+          Sees one hop of the circuit. Never knows both ends simultaneously.
+        </div>
+        <div style="background:#f8717118;border:1px solid #f8717144;border-radius:6px;padding:12px;">
+          <div style="font-weight:bold;color:#f87171;margin-bottom:6px;">Seized device</div>
+          No messages on disk. Keys in RAM only — cleared on reboot/app close.
+        </div>
+        <div style="background:#f8717118;border:1px solid #f8717144;border-radius:6px;padding:12px;">
+          <div style="font-weight:bold;color:#f87171;margin-bottom:6px;">Compromised contact</div>
+          Sees only their own conversation. Cannot impersonate sender (keys verify).
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
