@@ -61,6 +61,8 @@ class SignalSessionManager(ownBundle: KeyBundle) {
      * Initiate a session with [contact] by processing their pre-key bundle. Must be called
      * before [encrypt] on the initiator side.
      */
+    fun hasSessionWith(contact: Contact): Boolean = store.containsSession(contact.signalAddress)
+
     fun initSessionWith(contact: Contact) {
         val remoteBundle = contact.keyBundle
         require(remoteBundle.signalIdentityKeyPair.isNotEmpty()) {

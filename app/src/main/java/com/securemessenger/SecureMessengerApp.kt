@@ -12,6 +12,8 @@ import com.securemessenger.identity.KeyBundle
 import com.securemessenger.messaging.MessageQueue
 import com.securemessenger.messaging.MessagingService
 import com.securemessenger.transport.TorTransport
+import org.bouncycastle.jce.provider.BouncyCastleProvider
+import java.security.Security
 
 class SecureMessengerApp : Application() {
     lateinit var messagingService: MessagingService
@@ -19,12 +21,16 @@ class SecureMessengerApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        Security.removeProvider("BC")
+        Security.insertProviderAt(BouncyCastleProvider(), 1)
         val (bundle, privateKeyBytes) = loadOrCreateIdentity(this)
         // TorTransport expects 64-byte Ed25519 key: publicKey(32) + privateKey(32)
         val fullKey   = bundle.ed25519PublicKey + privateKeyBytes
+        android.util.Log.d("TorTransport", "Full key size: ${fullKey.size}")
+        android.util.Log.d("TorTransport", "Pub: ${bundle.ed25519PublicKey.take(4).joinToString("") { "%02x".format(it) }}... Priv: ${privateKeyBytes.take(4).joinToString("") { "%02x".format(it) }}...")
         val transport = TorTransport(this, fullKey)
         val session   = SignalSessionManager(bundle)
-        val contacts  = ContactStore()
+        val contacts  = ContactStore(this)
         val queue     = MessageQueue()
         messagingService = MessagingService(bundle, transport, session, contacts, queue)
     }
@@ -34,7 +40,7 @@ class SecureMessengerApp : Application() {
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
             .build()
         val prefs = EncryptedSharedPreferences.create(
-            context, "identity", masterKey,
+            context, "identity_v3", masterKey,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
         )

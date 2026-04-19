@@ -22,7 +22,9 @@ class ReceiptManager(
         when (packet) {
             is Packet.Ack         -> queue.markDelivered(packet.id)
             is Packet.ReadReceipt -> queue.markRead(packet.id)
-            is Packet.Msg         -> Unit
+            is Packet.Msg,
+            is Packet.Ping, is Packet.Pong,
+            is Packet.GroupInvite, is Packet.GroupMsg, is Packet.GroupClose -> Unit
         }
     }
 }

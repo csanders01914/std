@@ -33,6 +33,7 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
+    implementation(libs.compose.material.icons)
     implementation(libs.compose.tooling)
     implementation(libs.activity.compose)
     implementation(libs.security.crypto)
@@ -41,11 +42,15 @@ dependencies {
     implementation(libs.jtorctl)
     implementation(libs.zxing.core)
     implementation(libs.commons.codec)
+    implementation(libs.bouncycastle.bcprov)
     implementation(libs.navigation.compose)
     implementation(libs.camera.camera2)
     implementation(libs.camera.lifecycle)
     implementation(libs.camera.view)
     implementation(libs.lifecycle.runtime.compose)
+
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.coroutines.test)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

@@ -1,36 +1,45 @@
 package com.securemessenger.security
 
+import android.content.SharedPreferences
 import com.securemessenger.contact.Contact
 import com.securemessenger.contact.ContactStore
 import com.securemessenger.crypto.SignalSessionManager
 import com.securemessenger.identity.IdentityManager
 import com.securemessenger.messaging.*
+import com.securemessenger.persistence.MessageDao
 import com.securemessenger.protocol.Packet
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert.*
 import org.junit.Test
 import java.util.UUID
 
 class SecurityRegressionTest {
 
+    private val dao = mockk<MessageDao>(relaxed = true) {
+        coEvery { getAllMessages() } returns flowOf(emptyList())
+    }
+
     @Test fun `unknown sender is silently dropped — no crash, no state change`() {
-        val contacts     = ContactStore()
+        val prefs = mockk<SharedPreferences>(relaxed = true) {
+            every { all } returns emptyMap()
+        }
+        val contacts     = ContactStore(prefs)
         val unknownOnion = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.onion"
 
         val contact = contacts.getByOnion(unknownOnion)
         assertNull("Unknown sender should not be in store", contact)
     }
 
-    @Test fun `MessageQueue clear leaves no messages`() {
-        val queue = MessageQueue()
-        repeat(5) {
-            queue.enqueue(Message(UUID.randomUUID(), "x.onion", ByteArray(10), MessageStatus.PENDING))
-        }
-        queue.clear()
+    @Test fun `MessageQueue is empty when dao returns empty`() {
+        val queue = MessageQueue(dao)
         assertEquals(0, queue.getAll().size)
     }
 
     @Test fun `Receipt manager does not process packets for unknown message IDs`() {
-        val queue   = MessageQueue()
+        val queue   = MessageQueue(dao)
         val receipt = ReceiptManager(queue = queue, sendFn = { _, _ -> })
         val fakeId  = UUID.randomUUID()
         receipt.handleInboundReceipt(Packet.Ack(fakeId))

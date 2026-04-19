@@ -5,9 +5,10 @@
     <application
         android:name=".SecureMessengerApp"
         android:allowBackup="false"
+        android:extractNativeLibs="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.SecureMessenger">
+        android:theme="@style/Theme.STD">
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"

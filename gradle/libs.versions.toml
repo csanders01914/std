@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.0.21"
+kotlin = "2.1.0"
 agp = "8.7.3"
 compose-bom = "2024.12.01"
 activity-compose = "1.9.3"
@@ -9,15 +9,20 @@ tor-android = "0.4.8.16"
 jtorctl = "0.4.5.7"
 zxing = "3.5.3"
 commons-codec = "1.17.0"
+bouncycastle = "1.78.1"
 desugar-jdk = "2.1.4"
 navigation = "2.8.4"
 camerax = "1.4.1"
+mockk = "1.14.9"
+coroutines-test = "1.10.2"
+room = "2.6.1"
 
 [libraries]
 compose-bom          = { group = "androidx.compose", name = "compose-bom",           version.ref = "compose-bom" }
-compose-ui           = { group = "androidx.compose.ui", name = "ui" }
-compose-material3    = { group = "androidx.compose.material3", name = "material3" }
-compose-tooling      = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+compose-ui              = { group = "androidx.compose.ui", name = "ui" }
+compose-material3       = { group = "androidx.compose.material3", name = "material3" }
+compose-material-icons  = { group = "androidx.compose.material", name = "material-icons-extended" }
+compose-tooling         = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 activity-compose     = { group = "androidx.activity", name = "activity-compose",     version.ref = "activity-compose" }
 security-crypto      = { group = "androidx.security", name = "security-crypto",      version.ref = "security-crypto" }
 libsignal-android    = { group = "org.signal", name = "libsignal-android",           version.ref = "libsignal" }
@@ -25,15 +30,22 @@ tor-android          = { group = "info.guardianproject", name = "tor-android",  
 jtorctl              = { group = "info.guardianproject", name = "jtorctl",           version.ref = "jtorctl" }
 zxing-core           = { group = "com.google.zxing", name = "core",                 version.ref = "zxing" }
 commons-codec        = { group = "commons-codec", name = "commons-codec",           version.ref = "commons-codec" }
+bouncycastle-bcprov  = { group = "org.bouncycastle", name = "bcprov-jdk15to18",        version.ref = "bouncycastle" }
 junit                = { group = "junit", name = "junit",                            version = "4.13.2" }
+mockk                = { group = "io.mockk", name = "mockk",                         version.ref = "mockk" }
+coroutines-test      = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines-test" }
 desugar-jdk-libs     = { group = "com.android.tools", name = "desugar_jdk_libs",    version.ref = "desugar-jdk" }
 navigation-compose   = { group = "androidx.navigation", name = "navigation-compose",  version.ref = "navigation" }
 camera-camera2       = { group = "androidx.camera", name = "camera-camera2",           version.ref = "camerax" }
 camera-lifecycle     = { group = "androidx.camera", name = "camera-lifecycle",         version.ref = "camerax" }
 camera-view          = { group = "androidx.camera", name = "camera-view",              version.ref = "camerax" }
 lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version = "2.8.7" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
 [plugins]
 android-application  = { id = "com.android.application", version.ref = "agp" }
 kotlin-android       = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose       = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version = "2.1.0-1.0.29" }

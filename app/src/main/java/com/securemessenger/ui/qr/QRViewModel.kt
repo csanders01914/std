@@ -22,10 +22,21 @@ class QRViewModel(private val app: SecureMessengerApp) : ViewModel() {
         return bmp
     }
 
-    fun addContactFromJson(json: String) {
-        val bundle  = KeyBundle.fromJson(json)
-        val contact = Contact.fromKeyBundle(bundle)
-        service.contactStore.add(contact)
+    fun isValidContactJson(json: String): Boolean = try {
+        KeyBundle.fromJson(json.trim())
+        true
+    } catch (e: Exception) { false }
+
+    fun addContactFromJson(json: String, nickname: String? = null): Boolean {
+        return try {
+            val bundle = KeyBundle.fromJson(json)
+            val contact = Contact.fromKeyBundle(bundle, nickname)
+            service.contactStore.add(contact)
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
     }
 
     class Factory(private val app: SecureMessengerApp) : ViewModelProvider.Factory {

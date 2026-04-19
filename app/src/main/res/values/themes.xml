@@ -1,3 +1,3 @@
 <resources>
-    <style name="Theme.SecureMessenger" parent="android:Theme.Material.Light.NoActionBar"/>
+    <style name="Theme.STD" parent="android:Theme.Material.Light.NoActionBar"/>
 </resources>
